@@ -1,0 +1,26 @@
+Ανδριάννα Αναστασοπούλου 1115201300009
+
+Προγραμματισμός Συστήματος,
+Άσκηση 3 Εαρινού εξαμήνου 2020
+
+compile: make
+
+execution: 		./whoServer –q queryPortNum -s statisticsPortNum –w numThreads –b bufferSize
+				./master –w numWorkers -b bufferSize –s serverIP –p serverPort -i input_dir
+				./whoClient –q queryFile -w numThreads –sp servPort –sip servIP
+
+execution example:	./whoServer -q 5001 -s 5000 -w 12 -b 100
+					./master -w 5 -b 100 -i dir -s linux10.di.uoa.gr -p 5000
+					./whoClient -q queryFile.txt -w 6 -sp 5001 -sip linux10.di.uoa.gr
+
+clean-up: make clean
+
+
+Ο master ξεκινάει και δημιουργεί τους numWorkers Workers και στην συνέχεια μέσω ενός name-pipe τους ενημερώνει για τα Countries που θα αναλάβουν και επίσης για το IP και Port του whoServer. Έπειτα περιμένει εάν κάποιο παιδί/worker κλείσει να το ξεκινήσει ξανά. (Παρόμοια με την άσκηση 2)
+
+Οι workers λειτουργουν παρόμοια με την άσκηση 2. Η κύρια διαφορά είναι οτι αντί να στελνουν τα αποτελεσματα στον parent τους μεσω named-pipe τα στελνουν στον whoServer που εχει κανει connect στo listening socket του worker.
+
+O whoServer ξεκινάει φτιάχνοντας ενα thread pool με εναν job scheduler με κυκλικο buffer και δυο listening sockets οπου στo ενα συνδεονται οι workers για να στειλουν statistics και το PortNumber και την IP του listening socket τους και στo αλλo οι whoClient. Το main thread κάνει accept σε αυτα τα sockets και βαζει στον buffer του job scheduler τα file descriptors και οποιες άλλες πληροφοριες χρειαζονται. Τα threads στην συνεχεια παιρνουν τα jobs απο τον buffer και διαβαζουν τα queries που στελνει ο whoServer. Κανουν connect στους workers και αφου μεταβιβασουν τα queries περιμενουν για τα αποτελεσματα. Οταν τα λαβουν τα εκτυπωνουν και τα στελνουν και στον whoClient.
+
+O whoClient διαβαζει ενα αρχειο με queries. Δημιουργει numThreads Threads και οταν ολα αυτα δημιουργηθουν και παρουν το καθε ενα απο ενα query ξεκινανε ταυτοχρονα να στελνουν αιτηματα στον whoServer. Στην συνεχεια περιμενουν για την απαντηση του whoServer και την εκτυπωνουν.
+

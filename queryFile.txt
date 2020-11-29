@@ -1,0 +1,11 @@
+/searchPatientRecord 23577
+/numPatientDischarges COVID-19 22-12-2000 26-04-2019 GERMANY
+/numPatientAdmissions COVID-19 03-12-2015 04-01-2020 GERMANY
+/topk-AgeRanges 12 ITALY H1N1 24-11-2013 28-12-2020
+/diseaseFrequency H1N1 15-02-2011 16-02-2017 GREECE
+/searchPatientRecord 102139
+/numPatientDischarges H1N1 22-12-2006 26-04-2012 ITALY
+/numPatientDischarges H1N1 22-12-2006 26-04-2012
+/numPatientAdmissions COVID-19 03-10-2015 04-01-2019
+/topk-AgeRanges 4 SPAIN COVID-19 24-11-2003 28-11-2020
+/diseaseFrequency LUPUS 15-02-2011 16-02-2020
